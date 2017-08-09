@@ -19,10 +19,14 @@ protected:
 #endif//QT_NO_CONTEXTMENU
 
 private slots:
-    void newFile();
-    void open();
-    void save();
-    void saveAs();
+    void newWorkSpace();
+    void newTask();
+    void saveAll();
+    void saveWorkSpace();
+    void saveTask();
+    void cloneWorkSpace();
+    void cloneTask();
+    void selectWorkSpace();
     void undo();
     void redo();
     void cut();
@@ -37,15 +41,20 @@ private:
     void createMenus();
 
     QStatusBar* statusBar;
+    QTabWidget* tabWidget;
 
     QMenu* fileMenu;
     QMenu* editMenu;
     QMenu* helpMenu;
 
-    QAction* newAct;
-    QAction* openAct;
-    QAction* saveAct;
-    QAction* saveAsAct;
+    QAction* newWorkSpaceAct;
+    QAction* newTaskAct;
+    QAction* saveAllAct;
+    QAction* saveWorkSpaceAct;
+    QAction* saveTaskAct;
+    QAction* cloneWorkSpaceAct;
+    QAction* cloneTaskAct;
+    QAction* selectWorkSpaceAct;
     QAction* exitAct;
 
     QAction* undoAct;

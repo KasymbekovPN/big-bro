@@ -8,6 +8,8 @@
 #include <QApplication>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QStatusBar>
+#include <QtWidgets/QTableWidget>
+#include <QtWidgets/QPushButton>
 
 #include "mainwindow.h"
 
@@ -15,18 +17,27 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
 
+    resize(400, 300);
+
     QWidget* centralWidget = new QWidget;
     setCentralWidget(centralWidget);
 
-    // TODO: Убрать
-    QWidget* filler = new QWidget;
-    filler->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+//    addTabWidget = new QPushButton(tr("+"));
+
+    tabWidget = new QTabWidget;
+    tabWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+//    tabWidget->setStyleSheet("background-color: yellow");
+
+    QWidget* tabwidget1 = new QWidget;
+//    QWidget* tabwidget2 = new QWidget;
+    tabWidget->addTab(tabwidget1, tr("+"));
+//    tabWidget->addTab(tabwidget2, tr("tab2"));
 
     statusBar = new QStatusBar;
 
     QVBoxLayout* layout = new QVBoxLayout;
     layout->setMargin(5);
-    layout->addWidget(filler);
+    layout->addWidget(tabWidget);
     layout->addWidget(statusBar);
     centralWidget->setLayout(layout);
 
@@ -49,20 +60,36 @@ void MainWindow::contextMenuEvent(QContextMenuEvent* event){
 }
 #endif//QT_NO_CONTEXTMENU
 
-void MainWindow::newFile(){
-    statusBar->showMessage(tr("File|New"));
+void MainWindow::newWorkSpace(){
+    statusBar->showMessage(tr("File|New Work Space"));
 }
 
-void MainWindow::open(){
-    statusBar->showMessage(tr("File|Open"));
+void MainWindow::newTask(){
+    statusBar->showMessage(tr("File|New Task"));
 }
 
-void MainWindow::save(){
-    statusBar->showMessage(tr("File|Save"));
+void MainWindow::saveAll(){
+    statusBar->showMessage(tr("File|Save All"));
 }
 
-void MainWindow::saveAs(){
-    statusBar->showMessage(tr("File|Save As"));
+void MainWindow::saveWorkSpace(){
+    statusBar->showMessage(tr("File|Save Work Space"));
+}
+
+void MainWindow::saveTask(){
+    statusBar->showMessage(tr("File|Save task"));
+}
+
+void MainWindow::cloneWorkSpace(){
+    statusBar->showMessage(tr("File|Clone WorkSpace"));
+}
+
+void MainWindow::cloneTask(){
+    statusBar->showMessage(tr("File|Clone task"));
+}
+
+void MainWindow::selectWorkSpace(){
+    statusBar->showMessage(tr("File|Select WorkSpace"));
 }
 
 void MainWindow::undo(){
@@ -99,25 +126,29 @@ void MainWindow::aboutQt(){
 
 void MainWindow::createActions(){
 
-    newAct = new QAction(tr("&New"), this);
-    newAct->setShortcuts(QKeySequence::New);
-    newAct->setStatusTip(tr("Create a new file"));
-    connect(newAct, &QAction::triggered, this, &MainWindow::newFile);
+    newWorkSpaceAct = new QAction(tr("New workspace"), this);
+    connect(newWorkSpaceAct, &QAction::triggered, this, &MainWindow::newWorkSpace);
 
-    openAct = new QAction(tr("&Open"), this);
-    openAct->setShortcut(QKeySequence::Open);
-    openAct->setStatusTip(tr("Open an existing file"));
-    connect(openAct, &QAction::triggered, this, &MainWindow::open);
+    newTaskAct = new QAction(tr("New Task"), this);
+    connect(newTaskAct, &QAction::triggered, this, &MainWindow::newTask);
 
-    saveAct = new QAction(tr("Save"), this);
-    saveAct->setShortcuts(QKeySequence::Save);
-    saveAct->setStatusTip(tr("Save this document to disk"));
-    connect(saveAct, &QAction::triggered, this, &MainWindow::save);
+    saveAllAct = new QAction(tr("Save All"), this);
+    connect(saveAllAct, &QAction::triggered, this, &MainWindow::saveAll);
 
-    saveAsAct = new QAction(tr("Save as..."), this);
-    saveAsAct->setShortcuts(QKeySequence::SaveAs);
-    saveAsAct->setStatusTip(tr("Save this document as..."));
-    connect(saveAsAct, &QAction::triggered, this, &MainWindow::saveAs);
+    saveWorkSpaceAct = new QAction(tr("Save Workspace"), this);
+    connect(saveWorkSpaceAct, &QAction::triggered, this, &MainWindow::saveWorkSpace);
+
+    saveTaskAct = new QAction(tr("Save Task"), this);
+    connect(saveTaskAct, &QAction::triggered, this, &MainWindow::saveTask);
+
+    cloneWorkSpaceAct = new QAction(tr("Clone Workspace"), this);
+    connect(cloneWorkSpaceAct, &QAction::triggered, this, &MainWindow::cloneWorkSpace);
+
+    cloneTaskAct = new QAction(tr("Clone Task"), this);
+    connect(cloneTaskAct, &QAction::triggered, this, &MainWindow::cloneTask);
+
+    selectWorkSpaceAct = new QAction(tr("Select Workspace"), this);
+    connect(selectWorkSpaceAct, &QAction::triggered, this, &MainWindow::selectWorkSpace);
 
     exitAct = new QAction(tr("E&xit"), this);
     exitAct->setShortcuts(QKeySequence::Quit);
@@ -170,10 +201,14 @@ void MainWindow::createActions(){
 void MainWindow::createMenus(){
 
     fileMenu = menuBar()->addMenu(tr("&File"));
-    fileMenu->addAction(newAct);
-    fileMenu->addAction(openAct);
-    fileMenu->addAction(saveAct);
-    fileMenu->addAction(saveAsAct);
+    fileMenu->addAction(newWorkSpaceAct);
+    fileMenu->addAction(newTaskAct);
+    fileMenu->addAction(saveAllAct);
+    fileMenu->addAction(saveWorkSpaceAct);
+    fileMenu->addAction(saveTaskAct);
+    fileMenu->addAction(cloneWorkSpaceAct);
+    fileMenu->addAction(cloneTaskAct);
+    fileMenu->addAction(selectWorkSpaceAct);
     fileMenu->addSeparator();
     fileMenu->addAction(exitAct);
 
