@@ -17,7 +17,7 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
 
-    resize(400, 300);
+    resize(640, 480);
 
     QWidget* centralWidget = new QWidget;
     setCentralWidget(centralWidget);
@@ -26,11 +26,13 @@ MainWindow::MainWindow(QWidget *parent)
 
     tabWidget = new QTabWidget;
     tabWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+//    tabWidget->setTabsClosable(true);
+    connect(tabWidget, &QTabWidget::tabCloseRequested, this, &MainWindow::closeTab);
 //    tabWidget->setStyleSheet("background-color: yellow");
 
-    QWidget* tabwidget1 = new QWidget;
+//    QWidget* tabwidget1 = new QWidget;
 //    QWidget* tabwidget2 = new QWidget;
-    tabWidget->addTab(tabwidget1, tr("+"));
+//    tabWidget->addTab(tabwidget1, tr("+"));
 //    tabWidget->addTab(tabwidget2, tr("tab2"));
 
     statusBar = new QStatusBar;
@@ -43,6 +45,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     createActions();
     createMenus();
+
+    emit newTabAct->triggered();
 }
 
 MainWindow::~MainWindow()
@@ -59,6 +63,22 @@ void MainWindow::contextMenuEvent(QContextMenuEvent* event){
     menu.exec(event->globalPos());
 }
 #endif//QT_NO_CONTEXTMENU
+
+void MainWindow::newTab(){
+//    statusBar->showMessage(tr("File|New Tab"));
+    /*QWidget*/NewTab* newTabWidget = new NewTab(this);
+    tabWidget->addTab(newTabWidget, tr("New Tab"));
+
+    connect(newTabWidget, &NewTab::clickAddWorkspaceBtn, this, &MainWindow::newWorkSpace);
+    connect(newTabWidget, &NewTab::clickAddTaskBtn, this, &MainWindow::newTask);
+    connect(newTabWidget, &NewTab::clickCloneWorkspaceBtn, this, &MainWindow::cloneWorkSpace);
+    connect(newTabWidget, &NewTab::clickCloneTaskBtn, this, &MainWindow::cloneTask);
+    connect(newTabWidget, &NewTab::clickFilterBtn, this, &MainWindow::filter);
+
+    if (tabWidget->count() > 1){
+        tabWidget->setTabsClosable(true);
+    }
+}
 
 void MainWindow::newWorkSpace(){
     statusBar->showMessage(tr("File|New Work Space"));
@@ -90,6 +110,10 @@ void MainWindow::cloneTask(){
 
 void MainWindow::selectWorkSpace(){
     statusBar->showMessage(tr("File|Select WorkSpace"));
+}
+
+void MainWindow::filter(){
+    statusBar->showMessage(tr("File|Filter"));
 }
 
 void MainWindow::undo(){
@@ -124,7 +148,23 @@ void MainWindow::aboutQt(){
     statusBar->showMessage(tr("Help|About Qt"));
 }
 
+void MainWindow::closeTab(int tabIdx){
+
+    if (tabIdx < 0){
+        return;
+    }
+
+    tabWidget->removeTab(tabIdx);
+
+    if (tabWidget->count() < 2){
+        tabWidget->setTabsClosable(false);
+    }
+}
+
 void MainWindow::createActions(){
+
+    newTabAct = new QAction(tr("New Tab"), this);
+    connect(newTabAct, &QAction::triggered, this, &MainWindow::newTab);
 
     newWorkSpaceAct = new QAction(tr("New workspace"), this);
     connect(newWorkSpaceAct, &QAction::triggered, this, &MainWindow::newWorkSpace);
@@ -149,6 +189,9 @@ void MainWindow::createActions(){
 
     selectWorkSpaceAct = new QAction(tr("Select Workspace"), this);
     connect(selectWorkSpaceAct, &QAction::triggered, this, &MainWindow::selectWorkSpace);
+
+    filterAct = new QAction(tr("Filter"), this);
+    connect(filterAct, &QAction::triggered, this, &MainWindow::filter);
 
     exitAct = new QAction(tr("E&xit"), this);
     exitAct->setShortcuts(QKeySequence::Quit);
@@ -201,6 +244,7 @@ void MainWindow::createActions(){
 void MainWindow::createMenus(){
 
     fileMenu = menuBar()->addMenu(tr("&File"));
+    fileMenu->addAction(newTabAct);
     fileMenu->addAction(newWorkSpaceAct);
     fileMenu->addAction(newTaskAct);
     fileMenu->addAction(saveAllAct);
@@ -209,6 +253,7 @@ void MainWindow::createMenus(){
     fileMenu->addAction(cloneWorkSpaceAct);
     fileMenu->addAction(cloneTaskAct);
     fileMenu->addAction(selectWorkSpaceAct);
+    fileMenu->addAction(filterAct);
     fileMenu->addSeparator();
     fileMenu->addAction(exitAct);
 
