@@ -9,6 +9,7 @@
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QTextEdit>
 #include <QtWidgets/QListWidget>
+#include <QtWidgets/QListWidgetItem>
 //#include <QAction>
 
 class NewTab : public QWidget
@@ -30,6 +31,7 @@ public slots:
     void cloneWorkspace();
     void cloneTask();
     void filter();
+    void newContent(int row);
 
 private:
     QPushButton* addWorkspaceBtn;
@@ -46,6 +48,9 @@ private:
 
     QListWidget* lstWdgtWorkspace;
     QListWidget* lstwdgtTask;
+
+    QListWidgetItem* p_item[3];
+    QListWidgetItem* j_item[5];
 
 };
 

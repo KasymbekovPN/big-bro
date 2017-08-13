@@ -36,14 +36,26 @@ NewTab::NewTab(QWidget *parent) : QWidget(parent)
 
     lblWorkspace = new QLabel(tr("Workspaces"));
     lstWdgtWorkspace = new QListWidget;
+    connect(lstWdgtWorkspace, &QListWidget::currentRowChanged, this, &NewTab::newContent);
+
+    //---
+    QListWidgetItem* item1 = new QListWidgetItem(tr("Project big-bro"));
+    QListWidgetItem* item2 = new QListWidgetItem(tr("Job"));
+    lstWdgtWorkspace->addItem(item1);
+    lstWdgtWorkspace->addItem(item2);
+    //---
 
     QVBoxLayout* workspaceLayout = new QVBoxLayout;
     workspaceLayout->setMargin(3);
     workspaceLayout->addWidget(lblWorkspace);
     workspaceLayout->addWidget(lstWdgtWorkspace);
 
-    teditSearch = new QTextEdit;
+    teditSearch = new QTextEdit(tr("Search..."));
+    teditSearch->setFixedHeight(30);
+
     btnSearch = new QPushButton(tr("S"));
+    btnSearch->setFixedSize(30, 30);
+
     QHBoxLayout* searchLayout = new QHBoxLayout;
     searchLayout->setMargin(3);
     searchLayout->addWidget(teditSearch);
@@ -51,6 +63,19 @@ NewTab::NewTab(QWidget *parent) : QWidget(parent)
 
     lblTask = new QLabel(tr("Tasks"));
     lstwdgtTask = new QListWidget;
+
+    //---
+    p_item[0] = new QListWidgetItem(tr("Task 1_1"));
+    p_item[1] = new QListWidgetItem(tr("Task 1_2"));
+    p_item[2] = new QListWidgetItem(tr("Task 1_3"));
+
+    j_item[0] = new QListWidgetItem(tr("Task 2_1"));
+    j_item[1] = new QListWidgetItem(tr("Task 2_2"));
+    j_item[2] = new QListWidgetItem(tr("Task 2_3"));
+    j_item[3] = new QListWidgetItem(tr("Task 2_4"));
+    j_item[4] = new QListWidgetItem(tr("Task 2_5"));
+    //---
+
     QVBoxLayout* taskLayout = new QVBoxLayout;
     taskLayout->setMargin(3);
     taskLayout->addWidget(lblTask);
@@ -88,4 +113,32 @@ void NewTab::cloneTask(){
 
 void NewTab::filter(){
     emit clickFilterBtn();
+}
+
+// TODO: возможно следует переименовать
+void NewTab::newContent(int row){
+
+    lstwdgtTask->clear();
+
+    //-----
+    if (row == 0){
+
+        QListWidgetItem* buffer[3];
+
+        for(int i = 0; i < 3; i++){
+            buffer[i] = new QListWidgetItem(*p_item[i]);
+            lstwdgtTask->addItem(buffer[i]);
+        }
+    }
+    else if (row == 1){
+
+        QListWidgetItem* buffer[5];
+
+        for(int i = 0; i < 5; ++i){
+            buffer[i] = new QListWidgetItem(*j_item[i]);
+            lstwdgtTask->addItem(buffer[i]);
+        }
+    }
+    //----
+
 }
