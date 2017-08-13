@@ -6,6 +6,9 @@
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QTextEdit>
+#include <QtWidgets/QListWidget>
 //#include <QAction>
 
 class NewTab : public QWidget
@@ -35,13 +38,14 @@ private:
     QPushButton* cloneTaskBtn;
     QPushButton* filterBtn;
 
-    QLabel* filler;
+    QPushButton* btnSearch;
+    QTextEdit* teditSearch;
 
-//    QAction* addWorkspaceAct;
-//    QAction* addTaskAct;
-//    QAction* cloneWorkspaceAct;
-//    QAction* cloneTaskAct;
-//    QAction* filterAct;
+    QLabel* lblWorkspace;
+    QLabel* lblTask;
+
+    QListWidget* lstWdgtWorkspace;
+    QListWidget* lstwdgtTask;
 
 };
 

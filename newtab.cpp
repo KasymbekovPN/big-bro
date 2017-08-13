@@ -7,7 +7,6 @@ NewTab::NewTab(QWidget *parent) : QWidget(parent)
 
     addWorkspaceBtn = new QPushButton(tr("+W"));
     addWorkspaceBtn->setFixedSize(buttonSize);
-//    addWorkspaceBtn->setStyleSheet("background-color: green");
     connect(addWorkspaceBtn, &QPushButton::clicked, this, &NewTab::addWorkspace);
 
     addTaskBtn = new QPushButton(tr("+T"));
@@ -35,39 +34,58 @@ NewTab::NewTab(QWidget *parent) : QWidget(parent)
     headerLayout->addWidget(filterBtn);
     headerLayout->addStretch(1);
 
-    filler = new QLabel(tr("Label"), this);
-    filler->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    filler->setStyleSheet("background-color: yellow");
+    lblWorkspace = new QLabel(tr("Workspaces"));
+    lstWdgtWorkspace = new QListWidget;
 
-    QVBoxLayout* layout = new QVBoxLayout/*(this)*/;
+    QVBoxLayout* workspaceLayout = new QVBoxLayout;
+    workspaceLayout->setMargin(3);
+    workspaceLayout->addWidget(lblWorkspace);
+    workspaceLayout->addWidget(lstWdgtWorkspace);
+
+    teditSearch = new QTextEdit;
+    btnSearch = new QPushButton(tr("S"));
+    QHBoxLayout* searchLayout = new QHBoxLayout;
+    searchLayout->setMargin(3);
+    searchLayout->addWidget(teditSearch);
+    searchLayout->addWidget(btnSearch);
+
+    lblTask = new QLabel(tr("Tasks"));
+    lstwdgtTask = new QListWidget;
+    QVBoxLayout* taskLayout = new QVBoxLayout;
+    taskLayout->setMargin(3);
+    taskLayout->addWidget(lblTask);
+    taskLayout->addLayout(searchLayout);
+    taskLayout->addWidget(lstwdgtTask);
+
+    QHBoxLayout* workareaLayout = new QHBoxLayout;
+    workareaLayout->setMargin(3);
+    workareaLayout->addLayout(workspaceLayout);
+    workareaLayout->addLayout(taskLayout);
+
+    QVBoxLayout* layout = new QVBoxLayout;
     layout->setMargin(5);
     layout->addLayout(headerLayout);
-    layout->addWidget(filler);
+    layout->addLayout(workareaLayout);
 
     setLayout(layout);
 }
 
 void NewTab::addWorkspace(){
-    filler->setText(tr("addWorkspace"));
     emit clickAddWorkspaceBtn();
 }
 
 void NewTab::addTask(){
-    filler->setText(tr("addTask"));
     emit clickAddTaskBtn();
 }
 
 void NewTab::cloneWorkspace(){
-    filler->setText(tr("cloneWorkspace"));
     emit clickCloneWorkspaceBtn();
 }
 
 void NewTab::cloneTask(){
-    filler->setText(tr("cloneTask"));
     emit clickCloneTaskBtn();
 }
 
 void NewTab::filter(){
-    filler->setText(tr("filter"));
     emit clickFilterBtn();
 }
